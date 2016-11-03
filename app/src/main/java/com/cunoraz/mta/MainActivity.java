@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -165,33 +167,36 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.I
 
     @Override
     public void onClick(View v, int position) {
-        Intent i = new Intent(MainActivity.this, DetailActivity.class);
-        i.putExtra("item", items.get(position));
-        startActivity(i);
+        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+        intent.putExtra("item", items.get(position));
+        ActivityOptionsCompat options =
+
+                ActivityOptionsCompat.makeSceneTransitionAnimation(this, v, getString(R.string.transition_item));
+        ActivityCompat.startActivity(this, intent, options.toBundle());
     }
 
     public ArrayList<Item> getItems() {
         items = new ArrayList<>();
-        items.add(new Item("Bottom Navigation", "#ffff66"));
-        items.add(new Item("Buttons", "#ffff66"));
+        items.add(new Item("Bottom Navigation", "#F1D05D"));
+        items.add(new Item("Buttons", "#F1D05D"));
         items.add(new Item("Cards", "#00bfff"));
         items.add(new Item("Chips", "#00bfff"));
         items.add(new Item("Data Tables", "#ff33cc"));
         items.add(new Item("Dialogs", "#ff33cc"));
-        items.add(new Item("Dividers", "#1ff966"));
-        items.add(new Item("Expansion Panels", "#1ff966"));
-        items.add(new Item("Grid Lists", "#ffff66"));
-        items.add(new Item("Lists", "#ffff66"));
-        items.add(new Item("Bottom Navigation", "#ffff66"));
-        items.add(new Item("Buttons", "#ffff66"));
+        items.add(new Item("Dividers", "#59D5B8"));
+        items.add(new Item("Expansion Panels", "#59D5B8"));
+        items.add(new Item("Grid Lists", "#F1D05D"));
+        items.add(new Item("Lists", "#F1D05D"));
         items.add(new Item("Cards", "#00bfff"));
         items.add(new Item("Chips", "#00bfff"));
+        items.add(new Item("Bottom Navigation", "#F1D05D"));
+        items.add(new Item("Buttons", "#F1D05D"));
         items.add(new Item("Data Tables", "#ff33cc"));
         items.add(new Item("Dialogs", "#ff33cc"));
-        items.add(new Item("Dividers", "#1ff966"));
-        items.add(new Item("Expansion Panels", "#1ff966"));
-        items.add(new Item("Grid Lists", "#ffff66"));
-        items.add(new Item("Lists", "#ffff66"));
+        items.add(new Item("Dividers", "#59D5B8"));
+        items.add(new Item("Expansion Panels", "#59D5B8"));
+        items.add(new Item("Grid Lists", "#F1D05D"));
+        items.add(new Item("Lists", "#F1D05D"));
 
         return items;
     }
