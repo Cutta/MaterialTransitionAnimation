@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +31,6 @@ public class DetailActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-
 
     private Item item;
 
@@ -81,12 +83,23 @@ public class DetailActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(final ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new TabFragment(), "OVERVIEW");
         adapter.addFragment(new TabFragment(), "USAGE");
         adapter.addFragment(new TabFragment(), "STYLE");
         viewPager.setAdapter(adapter);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Animation bottomUp = AnimationUtils.loadAnimation(DetailActivity.this,
+                        R.anim.bottom_up);
+                viewPager.startAnimation(bottomUp);
+            }
+        }, 50);
+
+
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
