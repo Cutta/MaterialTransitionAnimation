@@ -80,9 +80,19 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.I
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                Log.d("onScrollStateChanged", "onScrollStateChanged: " + newState);
-                margin++;
-                EventBus.getDefault().post(new ScrollEvent(margin));
+
+                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                    Log.i("ScrollNewState", "SCROLL_STATE_IDLE");
+                else if (newState == RecyclerView.SCROLL_STATE_DRAGGING)
+                    Log.i("ScrollNewState", "SCROLL_STATE_DRAGGING");
+                else
+                    Log.i("ScrollNewState", "SCROLL_STATE_SETTLING");
+
+                if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_SETTLING) {
+                    EventBus.getDefault().post(new ScrollEvent(0));
+                } else
+                    EventBus.getDefault().post(new ScrollEvent(1));
+
             }
         });
 

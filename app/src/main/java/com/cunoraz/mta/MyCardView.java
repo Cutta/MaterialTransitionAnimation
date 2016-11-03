@@ -1,7 +1,9 @@
 package com.cunoraz.mta;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -16,7 +18,11 @@ import org.greenrobot.eventbus.Subscribe;
  */
 
 public class MyCardView extends RelativeLayout {
+
     CardView cardView;
+
+    ValueAnimator increaseAnimation;
+    ValueAnimator decreaseAnimation;
 
     public MyCardView(Context context) {
         super(context);
@@ -32,12 +38,49 @@ public class MyCardView extends RelativeLayout {
     @Subscribe
     public void onMessage(ScrollEvent event) {
         int margin = event.getMargin();
-        RelativeLayout.LayoutParams params =
-                new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-        params.setMargins(0,margin,0,0);
-        cardView.setLayoutParams(params);
+        if (margin == 0) {
+
+            if (increaseAnimation != null && increaseAnimation.isRunning())
+                increaseAnimation.cancel();
+
+            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) getLayoutParams();
+            int marginBottom = layoutParams.bottomMargin;
+
+            decreaseAnimation = ValueAnimator.ofInt(marginBottom, 0);
+            decreaseAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) getLayoutParams();
+                    layoutParams.bottomMargin = (int) animation.getAnimatedValue();
+                    setLayoutParams(layoutParams);
+                }
+            });
+            decreaseAnimation.setDuration(150);
+            decreaseAnimation.start();
+
+        } else {
+
+            if (decreaseAnimation != null && decreaseAnimation.isRunning())
+                decreaseAnimation.cancel();
+
+            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) getLayoutParams();
+            int marginBottom = layoutParams.bottomMargin;
+
+            increaseAnimation = ValueAnimator.ofInt(marginBottom, getResources().getDimensionPixelSize(R.dimen.cardview_max_marginBottom));
+            increaseAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) getLayoutParams();
+                    layoutParams.bottomMargin = (int) animation.getAnimatedValue();
+                    setLayoutParams(layoutParams);
+                }
+            });
+            increaseAnimation.setDuration(150);
+            increaseAnimation.start();
+
+        }
+
     }
 
 }
