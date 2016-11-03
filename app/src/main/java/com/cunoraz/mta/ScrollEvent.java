@@ -2,6 +2,7 @@ package com.cunoraz.mta;
 
 /**
  * Created by cuneytcarikci on 02/11/2016.
+ * Scrolll oldugunda gondermemiz gereken margin degerine kaarr verdikten sonra bu event fırlatılacak
  */
 
 class ScrollEvent {
