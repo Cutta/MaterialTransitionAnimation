@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -90,14 +89,9 @@ public class DetailActivity extends AppCompatActivity {
         adapter.addFragment(new TabFragment(), "STYLE");
         viewPager.setAdapter(adapter);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Animation bottomUp = AnimationUtils.loadAnimation(DetailActivity.this,
-                        R.anim.bottom_up);
-                viewPager.startAnimation(bottomUp);
-            }
-        }, 50);
+        Animation bottomUp = AnimationUtils.loadAnimation(DetailActivity.this,
+                R.anim.bottom_up);
+        viewPager.startAnimation(bottomUp);
 
 
     }

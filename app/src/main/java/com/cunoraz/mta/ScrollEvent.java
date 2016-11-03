@@ -6,8 +6,9 @@ package com.cunoraz.mta;
  */
 
 class ScrollEvent {
-    ScrollEvent(int margin) {
+    ScrollEvent(int margin,int position) {
         this.margin = margin;
+        this.position = position;
     }
 
     public int getMargin() {
@@ -19,5 +20,11 @@ class ScrollEvent {
     }
 
     private int margin;
+
+    public int getPosition() {
+        return position;
+    }
+
+    private int position;
 
 }

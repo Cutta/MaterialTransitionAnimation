@@ -3,7 +3,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">32dp</dimen>
 
-    <dimen name="cardview_height">100dp</dimen>
     <dimen name="cardview_max_marginBottom">8dp</dimen>
 
 </resources>

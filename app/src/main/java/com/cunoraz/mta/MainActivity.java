@@ -1,9 +1,6 @@
 package com.cunoraz.mta;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
@@ -15,11 +12,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
@@ -28,10 +25,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.I
     ArrayList<Item> items;
     MyRecyclerView recyclerView;
     LinearLayout headerView;
-    int margin = 5;
-
-    //boolean closingProcess = false;
-    //boolean openingProcess = false;
 
     AppBarStateChangeListener.State actualState;
 
@@ -51,36 +44,34 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.I
 
                         @Override
                         public void run() {
-                            closeRevealEffect(headerView);
+                            closeEffect(headerView);
                         }
                     });
                 } else if (state == State.EXPANDED) {
                     headerView.post(new Runnable() {
                         @Override
                         public void run() {
-                            openRevealEffect(headerView);
+                            openEffect(headerView);
                         }
                     });
                 }
             }
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                    //  Log.d("onScrollChange", " " + i + " " +i1+ " "+i2 + " "+i3 );
-                    //      margin ++;
-                    //    EventBus.getDefault().post(new ScrollEvent(margin));
-                }
-            });
-        }
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        RecyclerAdapter adapter = new RecyclerAdapter(getItems());
+        recyclerView.setAdapter(adapter);
 
+        final LinearLayoutManager llayoutManager = ((LinearLayoutManager)recyclerView.getLayoutManager());
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-
+                int firstVisiblePosition = llayoutManager.findFirstVisibleItemPosition();
+                //int lastVisiblePosition = llayoutManager.findLastVisibleItemPosition();
+              //  Log.d("onScrollStateChanged", firstVisiblePosition + " : " + lastVisiblePosition);
+                //Log.d("onScrollStateChanged", "onScrollStateChanged: "+firstVisiblePosition);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE)
                     Log.i("ScrollNewState", "SCROLL_STATE_IDLE");
                 else if (newState == RecyclerView.SCROLL_STATE_DRAGGING)
@@ -89,17 +80,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.I
                     Log.i("ScrollNewState", "SCROLL_STATE_SETTLING");
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_SETTLING) {
-                    EventBus.getDefault().post(new ScrollEvent(0));
+                    EventBus.getDefault().post(new ScrollEvent(0,firstVisiblePosition));
                 } else
-                    EventBus.getDefault().post(new ScrollEvent(1));
+                    EventBus.getDefault().post(new ScrollEvent(1,firstVisiblePosition));
 
             }
         });
-
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        RecyclerAdapter adapter = new RecyclerAdapter(getItems());
-        recyclerView.setAdapter(adapter);
 
 
     }
@@ -117,62 +103,38 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.I
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
-    private void openRevealEffect(final View myView) {
-        //  Log.d("TAG:", "openRevealEffect " + closingProcess);
-        //  if (closingProcess)
-        //    return;
-        //  closingProcess = false;
-//        openingProcess = true;
+    private void openEffect(final View myView) {
 
-        int cx = myView.getWidth() / 2;
-        int cy = myView.getHeight() / 2;
-
-        float finalRadius = (float) Math.hypot(cx, cy);
-
-        Animator anim =
-                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
-        anim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                //openingProcess = false;
-            }
-        });
-
+        Animation bottomUp = AnimationUtils.loadAnimation(MainActivity.this,
+                R.anim.grow_from_center);
+        myView.startAnimation(bottomUp);
         myView.setVisibility(View.VISIBLE);
-        anim.start();
+
     }
 
-    private void closeRevealEffect(final View myView) {
-        //Log.d("TAG:", "closeRevealEffect " + openingProcess);
-        // if (openingProcess)
-        //   return;
+    private void closeEffect(final View myView) {
 
-        // closingProcess = true;
-        //openingProcess = false;
-        int cx = myView.getWidth() / 2;
-        int cy = myView.getHeight() / 2;
-
-        float finalRadius = (float) Math.hypot(cx, cy);
-
-        Animator anim =
-                ViewAnimationUtils.createCircularReveal(myView, cx, cy, finalRadius, 0);
-        anim.addListener(new AnimatorListenerAdapter() {
+        Animation bottomUp = AnimationUtils.loadAnimation(MainActivity.this,
+                R.anim.shring_to_center);
+        bottomUp.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                myView.setVisibility(View.INVISIBLE);
-                //   closingProcess = false;
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                myView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
             }
         });
+        myView.startAnimation(bottomUp);
+        myView.setVisibility(View.INVISIBLE);
 
-        anim.start();
-
-    }
-
-    @Subscribe
-    public void onMessage(ScrollEvent event) {
-        Log.d("onMessage", "onMessage: ");
     }
 
     @Override

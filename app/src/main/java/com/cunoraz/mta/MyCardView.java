@@ -4,9 +4,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -14,7 +12,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by cuneytcarikci on 02/11/2016.
- *
  */
 
 public class MyCardView extends RelativeLayout {
@@ -23,6 +20,8 @@ public class MyCardView extends RelativeLayout {
 
     ValueAnimator increaseAnimation;
     ValueAnimator decreaseAnimation;
+
+    public static final int POSITION_DELAY = 0;
 
     public MyCardView(Context context) {
         super(context);
@@ -38,6 +37,7 @@ public class MyCardView extends RelativeLayout {
     @Subscribe
     public void onMessage(ScrollEvent event) {
         int margin = event.getMargin();
+        int position = event.getPosition();
 
         if (margin == 0) {
 
@@ -56,7 +56,7 @@ public class MyCardView extends RelativeLayout {
                     setLayoutParams(layoutParams);
                 }
             });
-            decreaseAnimation.setDuration(150);
+            decreaseAnimation.setDuration(150 + POSITION_DELAY * position);
             decreaseAnimation.start();
 
         } else {
@@ -76,7 +76,7 @@ public class MyCardView extends RelativeLayout {
                     setLayoutParams(layoutParams);
                 }
             });
-            increaseAnimation.setDuration(150);
+            increaseAnimation.setDuration(150 + POSITION_DELAY * position);
             increaseAnimation.start();
 
         }
