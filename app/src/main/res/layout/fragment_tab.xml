@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
     <TextView
-        android:text="Lorem Ipsum Dolor Sit Amet"
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:layout_margin="10dp"
-        android:textStyle="bold"
-        android:id="@+id/title" />
+        android:text="Lorem Ipsum Dolor Sit Amet"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:textStyle="bold" />
 
     <TextView
-        android:text="@string/lorem_ipsum"
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_margin="8dp"
-        android:id="@+id/textView" />
+        android:text="@string/lorem_ipsum"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 </LinearLayout>

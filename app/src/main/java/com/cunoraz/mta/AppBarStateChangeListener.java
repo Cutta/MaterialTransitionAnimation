@@ -4,6 +4,7 @@ import android.support.design.widget.AppBarLayout;
 
 /**
  * Created by cuneytcarikci on 27/10/2016.
+ * To catch AppBar status
  */
 
 abstract class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {

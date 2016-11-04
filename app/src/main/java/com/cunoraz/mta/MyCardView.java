@@ -12,6 +12,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by cuneytcarikci on 02/11/2016.
+ * This view is layout of list item.
+ * when list scrolling margin of items adjust here via eventbus
  */
 
 public class MyCardView extends RelativeLayout {
@@ -21,7 +23,8 @@ public class MyCardView extends RelativeLayout {
     ValueAnimator increaseAnimation;
     ValueAnimator decreaseAnimation;
 
-    public static final int POSITION_DELAY = 0;
+    public static final int DURATION = 150;
+
 
     public MyCardView(Context context) {
         super(context);
@@ -37,7 +40,6 @@ public class MyCardView extends RelativeLayout {
     @Subscribe
     public void onMessage(ScrollEvent event) {
         int margin = event.getMargin();
-        int position = event.getPosition();
 
         if (margin == 0) {
 
@@ -56,7 +58,7 @@ public class MyCardView extends RelativeLayout {
                     setLayoutParams(layoutParams);
                 }
             });
-            decreaseAnimation.setDuration(150 + POSITION_DELAY * position);
+            decreaseAnimation.setDuration(DURATION);
             decreaseAnimation.start();
 
         } else {
@@ -67,7 +69,7 @@ public class MyCardView extends RelativeLayout {
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) getLayoutParams();
             int marginBottom = layoutParams.bottomMargin;
 
-            increaseAnimation = ValueAnimator.ofInt(marginBottom, getResources().getDimensionPixelSize(R.dimen.cardview_max_marginBottom));
+            increaseAnimation = ValueAnimator.ofInt(marginBottom, getResources().getDimensionPixelSize(R.dimen.cardview_max_margin_bottom));
             increaseAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -76,7 +78,7 @@ public class MyCardView extends RelativeLayout {
                     setLayoutParams(layoutParams);
                 }
             });
-            increaseAnimation.setDuration(150 + POSITION_DELAY * position);
+            increaseAnimation.setDuration(DURATION);
             increaseAnimation.start();
 
         }

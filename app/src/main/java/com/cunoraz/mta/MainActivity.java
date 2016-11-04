@@ -8,7 +8,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,18 +22,23 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements RecyclerAdapter.ItemClick {
 
     ArrayList<Item> items;
-    MyRecyclerView recyclerView;
+    RecyclerView recyclerView;
     LinearLayout headerView;
+    AppBarLayout appBarLayout;
 
     AppBarStateChangeListener.State actualState;
+
+    boolean isOpen = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        headerView = (LinearLayout) findViewById(R.id.header);
-        recyclerView = (MyRecyclerView) findViewById(R.id.recycler_view);
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+
+        initViews();
+
+        setRecycle();
+
         appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
             @Override
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
@@ -58,36 +62,34 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.I
             }
         });
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-        RecyclerAdapter adapter = new RecyclerAdapter(getItems());
-        recyclerView.setAdapter(adapter);
-
-        final LinearLayoutManager llayoutManager = ((LinearLayoutManager)recyclerView.getLayoutManager());
+        final LinearLayoutManager llayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 int firstVisiblePosition = llayoutManager.findFirstVisibleItemPosition();
-                //int lastVisiblePosition = llayoutManager.findLastVisibleItemPosition();
-              //  Log.d("onScrollStateChanged", firstVisiblePosition + " : " + lastVisiblePosition);
-                //Log.d("onScrollStateChanged", "onScrollStateChanged: "+firstVisiblePosition);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE)
-                    Log.i("ScrollNewState", "SCROLL_STATE_IDLE");
-                else if (newState == RecyclerView.SCROLL_STATE_DRAGGING)
-                    Log.i("ScrollNewState", "SCROLL_STATE_DRAGGING");
-                else
-                    Log.i("ScrollNewState", "SCROLL_STATE_SETTLING");
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_SETTLING) {
-                    EventBus.getDefault().post(new ScrollEvent(0,firstVisiblePosition));
+                    EventBus.getDefault().post(new ScrollEvent(0));
                 } else
-                    EventBus.getDefault().post(new ScrollEvent(1,firstVisiblePosition));
+                    EventBus.getDefault().post(new ScrollEvent(1));
 
             }
         });
 
+    }
 
+    private void setRecycle() {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        RecyclerAdapter adapter = new RecyclerAdapter(getItems());
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void initViews() {
+        headerView = (LinearLayout) findViewById(R.id.header);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
     }
 
     @Override
@@ -105,21 +107,26 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.I
 
     private void openEffect(final View myView) {
 
+        if (isOpen)
+            return;
+
         Animation bottomUp = AnimationUtils.loadAnimation(MainActivity.this,
                 R.anim.grow_from_center);
         myView.startAnimation(bottomUp);
         myView.setVisibility(View.VISIBLE);
+        isOpen = true;
 
     }
 
     private void closeEffect(final View myView) {
+        if (!isOpen)
+            return;
 
         Animation bottomUp = AnimationUtils.loadAnimation(MainActivity.this,
                 R.anim.shring_to_center);
         bottomUp.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
             }
 
             @Override
@@ -129,11 +136,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.I
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
             }
         });
         myView.startAnimation(bottomUp);
         myView.setVisibility(View.INVISIBLE);
+        isOpen = false;
 
     }
 

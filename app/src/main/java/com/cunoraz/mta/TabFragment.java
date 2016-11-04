@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 /**
  * Created by cuneytcarikci on 03/11/2016.
+ * 
  */
 
 public class TabFragment extends Fragment {

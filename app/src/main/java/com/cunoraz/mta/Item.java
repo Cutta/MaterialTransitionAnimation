@@ -5,13 +5,14 @@ import android.os.Parcelable;
 
 /**
  * Created by cuneytcarikci on 27/10/2016.
+ * Liste item class
  */
 
-public class Item implements Parcelable {
+class Item implements Parcelable {
     private String text;
     private String color;
 
-    public Item(String text,String color){
+    Item(String text, String color){
         this.text = text;
         this.color = color;
     }
@@ -43,7 +44,7 @@ public class Item implements Parcelable {
         dest.writeString(this.color);
     }
 
-    protected Item(Parcel in) {
+    private Item(Parcel in) {
         this.text = in.readString();
         this.color = in.readString();
     }

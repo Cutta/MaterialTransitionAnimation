@@ -37,32 +37,26 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
         item = getIntent().getParcelableExtra("item");
+
+
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        appBarLayout.setBackgroundColor(Color.parseColor(item.getColor()));
-        toolbar.setBackgroundColor(Color.parseColor(item.getColor()));
-        tabLayout.setBackgroundColor(Color.parseColor(item.getColor()));
-
-
-        setupViewPager(viewPager);
-
-        tabLayout.setupWithViewPager(viewPager);
-
-
         toolbar.setTitle(item.getText());
         setSupportActionBar(toolbar);
 
+        changeColor();
+        setupViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
-
 
         ActionBar bar = getSupportActionBar();
         if (bar != null)
@@ -73,6 +67,12 @@ public class DetailActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(darker(Color.parseColor(item.getColor()), 0.9f));
         }
+    }
+
+    private void changeColor() {
+        appBarLayout.setBackgroundColor(Color.parseColor(item.getColor()));
+        toolbar.setBackgroundColor(Color.parseColor(item.getColor()));
+        tabLayout.setBackgroundColor(Color.parseColor(item.getColor()));
     }
 
     @Override
@@ -97,8 +97,8 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+        private final List<Fragment> fragmentList = new ArrayList<>();
+        private final List<String> fragmentTitleList = new ArrayList<>();
 
         ViewPagerAdapter(FragmentManager manager) {
             super(manager);
@@ -106,22 +106,22 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+            return fragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            return mFragmentList.size();
+            return fragmentList.size();
         }
 
         void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+            fragmentList.add(fragment);
+            fragmentTitleList.add(title);
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            return fragmentTitleList.get(position);
         }
     }
 
