@@ -1,11 +1,13 @@
 # MaterialTransitionAnimation
 I and <a href = "https://github.com/andanicalik">@andanicalik</a> inspired from <a href = "https://material.uplabs.com/posts/material-transition-animation"><b>Material Transition</b></a>
 which is designed by <a href = "http://twitter.com/ebruhu"><b>Ebru</b></a></br>
+
+<b>This is what we achieve animation effects</b></br>
+<img src = "https://raw.githubusercontent.com/Cutta/MaterialTransitionAnimation/master/code.gif" height="533" width="300" /></br>
 <b>This is original animation effects.</b></br>
 <img src = "https://raw.githubusercontent.com/Cutta/MaterialTransitionAnimation/master/design.gif" height="450" width="600" />
 
-<b>This is what we achieve animation effects</b></br>
-<img src = "https://raw.githubusercontent.com/Cutta/MaterialTransitionAnimation/master/code.gif" height="533" width="300" />
+
 
 # Authors
 <a href = "https://github.com/andanicalik">And Anı ÇALIK</a></br></br>
