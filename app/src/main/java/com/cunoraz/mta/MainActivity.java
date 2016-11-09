@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerAdapter.I
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                int firstVisiblePosition = llayoutManager.findFirstVisibleItemPosition();
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_SETTLING) {
                     EventBus.getDefault().post(new ScrollEvent(0));
