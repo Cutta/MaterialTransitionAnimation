@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_bg"
             android:drawableStart="@drawable/ic_search"
-            android:hint="  Give me a latter"
+            android:hint="  Give me a letter"
             android:padding="6dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColorHint="#b3b3b3" />
